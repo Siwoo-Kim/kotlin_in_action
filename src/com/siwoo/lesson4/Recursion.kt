@@ -1,5 +1,7 @@
 package com.siwoo.lesson4
 
+import java.util.concurrent.ConcurrentHashMap
+
 /**
  * corecursion - 한 단계의 결과를 다음 단계의 입력으로 사용. (첫 단계부터 차례로 계산.)
  *  공재귀는 각 단계를 즉시 계산할 수 있다. (모든 단계를 저장할 필요가 없다, 평가를 미룰 필요가 없다)
@@ -58,17 +60,62 @@ fun <T, U> foldLeft(init: U, list: List<T>, f: (U, T) -> U): U {
 } 
 
 fun sumFold(list: List<Int>) = foldLeft(0, list) { acc, e -> acc + e }
+
 fun stringFold(list: List<Char>) = foldLeft("", list) { acc, e -> acc + e }
 
 fun <T> makeStringFold(list: List<T>, delim: String) = foldLeft("", list) { acc, e -> if (acc.isEmpty()) "$e" else "$acc$delim$e" } 
 
-fun toStringS(list: List<Char>): String =
-    if (list.isEmpty()) ""
-    else prepend(list.first(), stringFold(list.drop(1)))
+fun toStringS(list: List<Char>): String = foldRight(list, "") {u, acc -> prepend(u, acc) }
 
-fun <T, U> foldRight(list: List<T>, identity: U, f: (T, U) -> U): U =
-    if (list.isEmpty()) identity
-    else f(list.first(), foldRight(list.drop(1), identity, f))
+fun <T, U> foldRight(list: List<T>, acc: U, f: (T, U) -> U): U = 
+    if (list.isEmpty()) acc
+    else f(list.first(), foldRight(list.drop(1), acc, f))
+
+fun <T> reverse(list: List<T>): List<T> = foldLeft(listOf(), list) { acc, e ->  prepend(acc, e) }
+
+fun <T> prepend(list: List<T>, e: T): List<T> = foldLeft(listOf(e), list) { acc, e -> acc + e }
+
+fun <T> copy(list: List<T>): List<T> = foldLeft(listOf(), list) { list, e -> list + e }
+
+fun range(start: Int, end: Int): List<Int> = unfold(start, { e -> e + 1 }, { e -> e <= end })
+
+fun <T> unfold(seed: T, f: (T) -> T, p: (T) -> Boolean): List<T> {
+    fun unfold(seed: T, list: List<T>): List<T> =
+        if (!p(seed)) list
+        else unfold(f(seed), list + seed)
+    return unfold(seed, listOf())
+} 
+
+fun rangeR(start: Int, end: Int): List<Int> = unfoldR(start, { e -> e + 1 }, { e -> e <= end })
+
+fun <T> unfoldR(seed: T, f: (T) -> T, p: (T) -> Boolean): List<T> {
+    fun unfoldR(seed: T): List<T> = 
+        if (!p(seed)) listOf()
+        else prepend(unfoldR(f(seed)), seed)
+    return unfoldR(seed)
+}
+
+fun <T> iterate(seed: T, f: (T) -> T, n: Int): List<T> {
+    fun iterate(seed: T, list: List<T>): List<T> =
+        if (list.size > n) list
+        else iterate( f(seed), list + seed)
+    
+    return iterate(seed, listOf())
+}
+
+fun <T, U> map(list: List<T>, f: (T) -> U): List<U> = foldLeft(listOf(), list) { list, e -> list + f(e) }
+
+class Memoizer<T, U> private constructor(){
+    val cache = ConcurrentHashMap<T, U>()
+    
+    private fun memorize(f: (T) -> U): (T) -> U = {
+        key -> cache.computeIfAbsent(key) { f(it) }
+    }
+    
+    companion object {
+        fun <T, U> memorize(f: (T) -> U): (T) -> U = Memoizer<T, U>().memorize(f)
+    }
+}
 
 fun main(args: Array<String>) {
     val s = toStringS(listOf('a', 'b', 'c'))
@@ -84,4 +131,13 @@ fun main(args: Array<String>) {
     println(stringFold(listOf('a', 'b', 'c')))
     println(makeStringFold(listOf(1, 2, 3, 4), ","))
     println(sumFold(listOf(1, 2, 3, 4, 5)))
+    
+    println(reverse(listOf(1, 2, 3)))
+    
+    println(range(10, 15))
+    println(rangeR(10, 15))
+    
+    range(10, 15).forEach{ i -> println(i) }
+    
+    val map = mutableMapOf<Int, Int>()
 }
