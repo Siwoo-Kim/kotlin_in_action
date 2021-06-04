@@ -1,4 +1,4 @@
-package com.siwoo.lesson2
+package com.siwoo.c2
 
 
 data class Company(val manager: Manager?)

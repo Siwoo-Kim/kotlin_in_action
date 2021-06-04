@@ -1,4 +1,4 @@
-package com.siwoo.lesson3
+package com.siwoo.c3
 
 import java.io.Serializable
 import java.lang.IllegalStateException

@@ -1,4 +1,4 @@
-package com.siwoo.lesson2
+package com.siwoo.c2
 
 import java.io.Serializable
 import java.time.Instant

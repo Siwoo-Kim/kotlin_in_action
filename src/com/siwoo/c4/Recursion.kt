@@ -1,4 +1,4 @@
-package com.siwoo.lesson4
+package com.siwoo.c4
 
 import java.util.concurrent.ConcurrentHashMap
 

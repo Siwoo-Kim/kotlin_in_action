@@ -1,6 +1,6 @@
-package com.siwoo.lesson2
+package com.siwoo.c2
 
-import com.siwoo.lesson2.lastChar as last  //can import function and alias it
+import com.siwoo.c2.lastChar as last  //can import function and alias it
 
 fun add(a: Int, b: Int): Int = a + b
 

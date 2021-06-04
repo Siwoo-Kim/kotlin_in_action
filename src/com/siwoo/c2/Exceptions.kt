@@ -1,6 +1,5 @@
-package com.siwoo.lesson2
+package com.siwoo.c2
 
-import java.io.File
 import java.lang.Exception
 import java.nio.file.Paths
 

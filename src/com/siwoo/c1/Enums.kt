@@ -1,4 +1,4 @@
-package com.siwoo.lesson1
+package com.siwoo.c1
 
 import java.io.BufferedReader
 import java.lang.IllegalArgumentException

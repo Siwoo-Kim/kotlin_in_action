@@ -1,7 +1,6 @@
-package com.siwoo.lesson4
+package com.siwoo.c4
 
 import java.io.File
-import java.lang.StringBuilder
 
 private data class Person(val name: String, val age: Int)
 

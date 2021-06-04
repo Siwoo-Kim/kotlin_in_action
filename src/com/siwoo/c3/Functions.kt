@@ -1,4 +1,4 @@
-package com.siwoo.lesson3
+package com.siwoo.c3
 
 import java.lang.IllegalArgumentException
 

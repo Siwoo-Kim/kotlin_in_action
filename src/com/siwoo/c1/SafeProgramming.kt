@@ -1,4 +1,4 @@
-package com.siwoo.lesson1
+package com.siwoo.c1
 
 import java.lang.IllegalArgumentException
 import kotlin.test.assertEquals
